@@ -24,11 +24,19 @@ Route::get('menu/', function () {
 });
 #endregion
 
-#region Rutas pedidos
+#region Rutas Pedidos
 
 Route::get("Pedidos/view", function() {
     return view('Pedidos/view');
 })->name("viewPeds");
+
+#endregion
+
+#region Rutas Productos
+
+Route::get("Productos/insert",function(){
+    return view('Productos/insert');
+})->name("insertProds");
 
 #endregion
 
