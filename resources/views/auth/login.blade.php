@@ -2,7 +2,7 @@
 
 @section('textoAqui')
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
@@ -68,6 +68,14 @@
                 </div>
             </div>
         </div>
+        <div class="col"></div>
+        <div class="col">
+            <h1 class="center">Login</h1>
+            <form action="{{ route('login') }}" method="POST" class="shadow p-3 mb-5 bg-white rounded" id="form-login">
+                
+            </form>
+        </div>
+        <div class="col"></div>
     </div>
 </div>
 @endsection
