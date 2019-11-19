@@ -34,9 +34,9 @@ Route::get("Pedidos/view", function() {
 
 #region Rutas Productos
 
-Route::get("Productos/insert",function(){
-    return view('Productos/insert');
-})->name("insertProds");
+Route::get('producto/view/{from?}','ProductoController@showAll')->where('from','[0-1]+');
+
+Route::resource('producto','ProductoController');
 
 #endregion
 

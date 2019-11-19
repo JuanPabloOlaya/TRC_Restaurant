@@ -3,8 +3,8 @@
 @section('textoAqui')
 
 <div class="container shadow p-3 mb-5 bg-white rounded">
-    <form action="" method="POST" enctype="multipart/form-data" class="container shadow p-3 mb-5 bg-white rounded">
-
+    <form action="{{ route('producto.store') }}" method="POST" enctype="multipart/form-data" class="container shadow p-3 mb-5 bg-white rounded">
+        @csrf
         <div class="text-center titulo">
             <h1>Agregar Nuevo Producto</h1>
         </div>
@@ -33,7 +33,7 @@
             <div class="col">
                 <label for="description">Foto</label>
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                    <input type="file" class="custom-file-input" id="validatedCustomFile" name="photo" required>
                     <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
                     <div class="invalid-feedback">Example invalid custom file feedback</div>
                 </div>
@@ -44,7 +44,7 @@
         <br>
         <center>
             <div class="card-footer text-muted">
-                <button type="submit" class="btn btn-primary">Agregar</button>
+                <button type="submit" class="btn btn-outline-primary">Agregar</button>
             </div>
         </center>
     </form>
