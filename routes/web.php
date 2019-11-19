@@ -40,3 +40,10 @@ Route::resource('producto','ProductoController');
 
 #endregion
 
+#region Rutas Clientes
+
+Route::resource('cliente','ClienteController');
+
+#endregion
+
+
