@@ -17,7 +17,9 @@ class CreateDetallesTable extends Migration
             $table->bigIncrements('id_detalles');
             $table->integer('detalles_cantidad_prods');
             $table->unsignedBigInteger('Producto_prod_id');
-            $table->foreign('Producto_prod_id')->references('id_producto')->on('Producto');
+            $table->foreign('Producto_prod_id')->references('id_producto')->on('Productos');
+            $table->unsignedBigInteger('Clientes_cli_id');
+            $table->foreign('Clientes_cli_id')->references('id_cliente')->on('Clientes');
             $table->timestamps();
         });
     }
