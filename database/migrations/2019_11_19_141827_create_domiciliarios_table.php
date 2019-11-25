@@ -14,7 +14,7 @@ class CreateDomiciliariosTable extends Migration
     public function up()
     {
         Schema::create('domiciliarios', function (Blueprint $table) {
-            $table->bigIncrements('id_domiciliario');
+            $table->bigIncrements('id');
             $table->string('nombre_domiciliario');
             $table->string('telefono_domiciliario');
             $table->string('tipo_doc_domiciliario');

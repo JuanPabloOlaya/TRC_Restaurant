@@ -58,6 +58,7 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Productos</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{{ route('producto.create') }}">Agregar Producto</a>
+              <a class="dropdown-item" href="{{ route('producto.index') }}">Listado Productos</a>
             </div>
           </li>
         </ul>

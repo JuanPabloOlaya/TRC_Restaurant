@@ -14,7 +14,9 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        //
+        $orp = App\Producto::paginate(3);
+
+        return view('Productos/view', compact('orp'));
     }
 
     /**
@@ -24,6 +26,7 @@ class ProductoController extends Controller
      */
     public function create()
     {
+
         return view('Productos/insert');
     }
 
@@ -55,6 +58,8 @@ class ProductoController extends Controller
 
         $ip->save();
 
+        return redirect()->route("producto.index");
+
     }
 
     /**
@@ -65,7 +70,10 @@ class ProductoController extends Controller
      */
     public function show($id)
     {
-        //
+        $orp = App\Producto::find($id);
+
+        return view("Productos/detail",compact("orp"));
+
     }
 
     /**
@@ -77,7 +85,8 @@ class ProductoController extends Controller
     {
         $orp = App\Producto::all();
         if ($from != FALSE) {
-            echo json_encode($orp);
+            $data['productos'] = $orp;
+            echo json_encode($data);
         }
         else {
             return view('Productos/view',compact('orp'));
@@ -92,7 +101,9 @@ class ProductoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $orp = App\Producto::find($id);
+
+        return view("Productos/update",compact("orp"));
     }
 
     /**
@@ -104,7 +115,29 @@ class ProductoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $orp = App\Producto::find($id);
+
+        $request->validate([
+            'photo' => 'file|image',
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'description' => 'required'
+        ]);
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $foto = time() . $file->getClientOriginalName();
+            $file->move(public_path().'/img/Productos/', $foto);
+        } else {
+            $foto = $request->fotoAct;
+        }
+        $orp->nombre_producto = $request->name;
+        $orp->descripcion_producto = $request->description;
+        $orp->precio_producto = $request->price;
+        $orp->foto_producto = $foto;
+
+        $orp->update();
+
+        return redirect()->route("producto.index");
     }
 
     /**
@@ -115,6 +148,10 @@ class ProductoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $orp = App\Producto::find($id);
+
+        $orp->delete();
+
+        return redirect()->route("producto.index");
     }
 }
