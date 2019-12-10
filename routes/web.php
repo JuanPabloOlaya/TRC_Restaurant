@@ -26,9 +26,8 @@ Route::get('menu/', function () {
 
 #region Rutas Pedidos
 
-Route::get("Pedidos/view", function() {
-    return view('Pedidos/view');
-})->name("viewPeds");
+Route::get('pedido/update/{id?}','PedidoController@cambiarEstado')->where('id','[0-9]+')->name("CambiarEstadoPed");
+Route::resource('pedido','PedidoController');
 
 #endregion
 

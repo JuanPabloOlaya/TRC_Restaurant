@@ -2,7 +2,6 @@
 
 @section('textoAqui')
 <div class="card-columns">
-  @if ()
 
   @foreach ($orp as $p)
   <div class="card">
@@ -25,7 +24,6 @@
       </div>
   </div>
   @endforeach
-  @endif
 </div>
 <div class="row justify-content-center">
   {{ $orp->links() }}

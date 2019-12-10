@@ -11,36 +11,22 @@
                         <thead class="table-danger">
                             <tr>
                                 <th>Fecha del Pedido</th>
-                                <th>Cantidad de productos</th>
                                 <th>Valor Total</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>17-11-2019 13:30:00</td>
-                                <td>3</td>
-                                <td>$ 15.000</td>
-                                <td>
-                                    <a id="4" href="#" onclick="elaborar('4')">Elaborar</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>17-11-2019 13:30:00</td>
-                                <td>3</td>
-                                <td>$ 15.000</td>
-                                <td>
-                                    <a id="5" href="#" onclick="elaborar('5')">Elaborar</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>17-11-2019 13:30:00</td>
-                                <td>3</td>
-                                <td>$ 15.000</td>
-                                <td>
-                                    <a id="6" href="#" onclick="elaborar('6')">Elaborar</a>
-                                </td>
-                            </tr>
+                        <tbody id="tBodyEspera">
+                            @foreach ($orp as $p)
+                                @if ($p->estado_pedido == "EN ESPERA")
+                                    <tr>
+                                        <td>{{ $p->created_at }}</td>
+                                        <td>{{ $p->valor_total_pedido }}</td>
+                                        <td>
+                                        <a id="{{ $p->id }}" href="#" onclick="elaborar('{{ $p->id }}')">Elaborar</a>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -55,28 +41,22 @@
                         <thead class="table-warning">
                             <tr>
                                 <th>Fecha del Pedido</th>
-                                <th>Cantidad de productos</th>
                                 <th>Valor Total</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>17-11-2019 13:30:00</td>
-                                <td>3</td>
-                                <td>$ 15.000</td>
-                                <td>
-                                    <a id="2" href="#" onclick="terminar('2')">Terminar</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>17-11-2019 13:30:00</td>
-                                <td>3</td>
-                                <td>$ 15.000</td>
-                                <td>
-                                    <a id="3" href="#" onclick="terminar('3')">Terminar</a>
-                                </td>
-                            </tr>
+                        <tbody id="tBodyProceso">
+                            @foreach ($orp as $p)
+                                @if ($p->estado_pedido == "EN PROCESO")
+                                    <tr>
+                                        <td>{{ $p->created_at }}</td>
+                                        <td>{{ $p->valor_total_pedido }}</td>
+                                        <td>
+                                        <a id="{{ $p->id }}" href="#" onclick="terminar('{{ $p->id }}')">Terminar</a>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -91,20 +71,23 @@
                         <thead class="table-success">
                             <tr>
                                 <th>Fecha del Pedido</th>
-                                <th>Cantidad de productos</th>
                                 <th>Valor Total</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>17-11-2019 13:30:00</td>
-                                <td>3</td>
-                                <td>$ 15.000</td>
-                                <td>
-                                    <a id="1" href="#" onclick="notificar('1')">Notificar</a>
-                                </td>
-                            </tr>
+                        <tbody id="tBodyEntregar">
+                            
+                            @foreach ($orp as $p)
+                                @if ($p->estado_pedido == "PARA ENTREGAR")
+                                    <tr>
+                                        <td>{{ $p->created_at }}</td>
+                                        <td>{{ $p->valor_total_pedido }}</td>
+                                        <td>
+                                        <a id="{{ $p->id }}" href="#" onclick="notificar('{{ $p->id }}')">Notificar</a>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -112,29 +95,99 @@
         </div>
     </div>
     <script>
-        function elaborar($id)
+      
+        function elaborar(id)
         {
-            var parent = $("#" + $id).parents("tr");
-            $("#" + $id).parents("tr").slideDown('normal',function(){
+
+            $.get(
+                "<?php echo route('CambiarEstadoPed');?>" + "/" + id,
+                $(this).serialize(),
+                function(data)
+                {
+                    var obj = JSON.parse(data);
+                    if (obj.respuesta == "1")
+                    {
+                        $("#tBodyEspera").empty();
+                        $("#tBodyProceso").empty();
+                        $("#tBodyEntregar").empty();
+                        obj.pedidos.forEach(element => {
+                            if(element.estado_pedido == "EN ESPERA")
+                            {
+                                $("#tBodyEspera").append("<tr><td>" + element.created_at + "</td><td>" + element.valor_total_pedido + "</td><td><a id='" + element.id + "' onclick='elaborar(" + element.id + ")'>Elaborar</a></td></tr>");
+                            }
+                            if(element.estado_pedido == "EN PROCESO")
+                            {
+                                $("#tBodyProceso").append("<tr><td>" + element.created_at + "</td><td>" + element.valor_total_pedido + "</td><td><a id='" + element.id + "' onclick='terminar(" + element.id + ")'>Terminar</a></td></tr>");
+                            }
+                            if(element.estado_pedido == "PARA ENTREGAR")
+                            {
+                                $("#tBodyEntregar").append("<tr><td>" + element.created_at + "</td><td>" + element.valor_total_pedido + "</td><td><a id='" + element.id + "' onclick='notificar(" + element.id + ")'>Notificar</a></td></tr>");
+                            }
+                        });
+                        swal("Pedido Actulizado!", "Presiona el botón!", "success");
+                    }
+                    else
+                    {
+                        swal("No llego");
+                    }
+                }
+            );
+            var parent = $("#" + id).parents("tr");
+            $("#" + id).parents("tr").slideDown('normal',function(){
                 $(this).remove();
             });
 
             $("table#tHaciendo").children("tbody").append(parent);
-            $("table#tHaciendo tbody tr td a#" + $id).attr("onclick","terminar('" + $id + "')");
-            $("table#tHaciendo tbody tr td a#" + $id).text("Terminar");
+            $("table#tHaciendo tbody tr td a#" + id).attr("onclick","terminar('" + id + "')");
+            $("table#tHaciendo tbody tr td a#" + id).text("Terminar");
         }
-        function terminar($id)
+        function terminar(id)
         {
-            var parent = $("#" + $id).parents("tr");
-            $("#" + $id).parents("tr").remove();
+            $.get(
+                "<?php echo route('CambiarEstadoPed');?>" + "/" + id,
+                $(this).serialize(),
+                function(data)
+                {
+                    console.log(data);
+                    var obj = JSON.parse(data);
+                    if (obj.respuesta == "1")
+                    {
+                        $("#tBodyEspera").empty();
+                        $("#tBodyProceso").empty();
+                        $("#tBodyEntregar").empty();
+                        obj.pedidos.forEach(element => {
+                            if(element.estado_pedido == "EN ESPERA")
+                            {
+                                $("#tBodyEspera").append("<tr><td>" + element.created_at + "</td><td>" + element.valor_total_pedido + "</td><td><a id='" + element.id + "' onclick='elaborar(" + element.id + ")'>Elaborar</a></td></tr>");
+                            }
+                            if(element.estado_pedido == "EN PROCESO")
+                            {
+                                $("#tBodyProceso").append("<tr><td>" + element.created_at + "</td><td>" + element.valor_total_pedido + "</td><td><a id='" + element.id + "' onclick='terminar(" + element.id + ")'>Terminar</a></td></tr>");
+                            }
+                            if(element.estado_pedido == "PARA ENTREGAR")
+                            {
+                                $("#tBodyEntregar").append("<tr><td>" + element.created_at + "</td><td>" + element.valor_total_pedido + "</td><td><a id='" + element.id + "' onclick='notificar(" + element.id + ")'>Notificar</a></td></tr>");
+                            }
+                        });
+                        swal("Pedido Actulizado!", "Presiona el botón!", "success");
+                    }
+                    else
+                    {
+                        swal("No llego");
+                    }
+                }
+            );
+
+            var parent = $("#" + id).parents("tr");
+            $("#" + id).parents("tr").remove();
 
             $("table#tTerminado").children("tbody").append(parent);
-            $("table#tTerminado tbody tr td a#" + $id).attr("onclick","notificar('" + $id + "')");
-            $("table#tTerminado tbody tr td a#" + $id).text("Notificar");
+            $("table#tTerminado tbody tr td a#" + id).attr("onclick","notificar('" + id + "')");
+            $("table#tTerminado tbody tr td a#" + id).text("Notificar");
         }
-        function notificar($id)
+        function notificar(id)
         {
-            alert("Un nuevo pedido esta listo para entregar!!");
+            swal("Un nuevo pedido esta listo para entregar!!");
         }
     </script>
 @endsection

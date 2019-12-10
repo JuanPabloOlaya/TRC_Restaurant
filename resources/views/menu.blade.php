@@ -11,6 +11,7 @@
 
   <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
   <script src="{{ asset('js/aplication.js') }}"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
@@ -51,7 +52,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Pedidos</a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="{{ route('viewPeds') }}">Ver Pedidos</a>
+              <a class="dropdown-item" href="{{ route('pedido.index') }}">Ver Pedidos</a>
             </div>
           </li>
           <li class="nav-item dropdown">
